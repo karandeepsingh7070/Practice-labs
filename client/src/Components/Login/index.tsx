@@ -22,9 +22,15 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { modalState } from "@/modals"
+import { loginUser } from "@/api/login";
+import { setCookies } from "@/helper";
+import { useUserState } from "@/store/useUserStore";
 
 
 const LoginForm = ({ setIsModalOpen }: modalState) => {
+
+
+  const { setLoggedIn } = useUserState();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -33,8 +39,12 @@ const LoginForm = ({ setIsModalOpen }: modalState) => {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        let res = await loginUser({name: values.username, email: values.email})
+        setCookies({key : "token", value : res.token})
+        setIsModalOpen(false)
+        setLoggedIn(true)
     }
 
     return (<>
