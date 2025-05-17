@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	routes "github.com/karan/practicelapbs/roues"
+	routes "github.com/karan/practicelapbs/routes"
 )
 
 type User struct {
