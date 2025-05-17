@@ -20,7 +20,7 @@ const SignInCta = ({setIsModalOpen}: modalState) => {
     if(token) setLoggedIn(true)
   },[])
   return (<>
-  {isLoggedIn ? <UserRoundCheck /> : <Button className={`rounded-sm ${RobotoBold.className}`} variant="outline" onClick={() => setIsModalOpen(true)}>Log in</Button>}
+  {isLoggedIn ? <UserRoundCheck className='text-[#FE7743]' /> : <Button className={`rounded-sm ${RobotoBold.className}`} variant="outline" onClick={() => setIsModalOpen(true)}>Log in</Button>}
   </>)
 }
 

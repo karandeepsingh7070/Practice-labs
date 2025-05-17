@@ -25,6 +25,7 @@ import { modalState } from "@/modals"
 import { loginUser } from "@/api/login";
 import { setCookies } from "@/helper";
 import { useUserState } from "@/store/useUserStore";
+import { toast } from "sonner";
 
 
 const LoginForm = ({ setIsModalOpen }: modalState) => {
@@ -43,12 +44,14 @@ const LoginForm = ({ setIsModalOpen }: modalState) => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         let res = await loginUser({name: values.username, email: values.email})
         setCookies({key : "token", value : res.token})
+        localStorage.setItem('userData',JSON.stringify({name: values.username, email: values.email}))
         setIsModalOpen(false)
         setLoggedIn(true)
+        toast(`${values.username} Logged in Succesfully`)
     }
 
     return (<>
-        <div className="h-[100vh] w-[100vw] flex justify-center items-center bg-[#0007] absolute top-0 z-9">
+        <div className="h-[100vh] w-[100vw] flex justify-center items-center bg-[#000007f2] absolute top-0 z-9">
             <Form {...form}>
                 <div>
                     <Cross className="text-white cursor-pointer rotate-45 mb-4 ml-[95%]" onClick={() => setIsModalOpen(false)} />
@@ -81,7 +84,7 @@ const LoginForm = ({ setIsModalOpen }: modalState) => {
                                 </FormItem>
                             )}
                         />
-                        <Button className="text-[#FE7743] cursor-pointer" type="submit">Submit</Button>
+                        <Button className="text-[#FE7743] cursor-pointer w-[100%];" type="submit">Submit</Button>
                     </form>
                 </div>
             </Form>
