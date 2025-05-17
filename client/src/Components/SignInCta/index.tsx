@@ -5,6 +5,7 @@ import { Roboto } from "next/font/google";
 import { modalState } from '@/modals';
 import { useEffect } from 'react';
 import { getCookies } from '@/helper';
+import { UserRoundCheck } from "lucide-react";
 
 const RobotoBold = Roboto({
   weight: "700",
@@ -19,7 +20,7 @@ const SignInCta = ({setIsModalOpen}: modalState) => {
     if(token) setLoggedIn(true)
   },[])
   return (<>
-  {isLoggedIn ? <div>User LoggedIn</div> : <Button className={`rounded-sm ${RobotoBold.className}`} variant="outline" onClick={() => setIsModalOpen(true)}>Log in</Button>}
+  {isLoggedIn ? <UserRoundCheck /> : <Button className={`rounded-sm ${RobotoBold.className}`} variant="outline" onClick={() => setIsModalOpen(true)}>Log in</Button>}
   </>)
 }
 
