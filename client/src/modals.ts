@@ -1,0 +1,1 @@
+export interface modalState {setIsModalOpen : (value: boolean) => void}

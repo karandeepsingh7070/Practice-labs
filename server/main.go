@@ -15,7 +15,7 @@ var authSecret = []byte("copowered by WisdomBits")
 
 func main() {
 	app := fiber.New()
-
+	// if you receive Bad request log out the user from FE...
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     "http://localhost:3000",
 		AllowHeaders:     "Origin, Content-Type, Accept",
