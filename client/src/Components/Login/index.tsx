@@ -2,7 +2,7 @@
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Cross } from "lucide-react";
+// import { Cross } from "lucide-react";
 
 const formSchema = z.object({
     username: z.string().min(2).max(50),
@@ -21,17 +21,25 @@ import {
     FormLabel,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { modalState } from "@/modals"
 import { loginUser } from "@/api/login";
 import { setCookies } from "@/helper";
 import { useUserState } from "@/store/useUserStore";
 import { toast } from "sonner";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { useRef } from "react"
 
 
-const LoginForm = ({ setIsModalOpen }: modalState) => {
-
-
-  const { setLoggedIn } = useUserState();
+const LoginForm = () => {
+    const { setLoggedIn } = useUserState();
+    const dialogRef = useRef<any>(null)
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -42,21 +50,32 @@ const LoginForm = ({ setIsModalOpen }: modalState) => {
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        let res = await loginUser({name: values.username, email: values.email})
-        setCookies({key : "token", value : res.token})
-        localStorage.setItem('userData',JSON.stringify({name: values.username, email: values.email}))
-        setIsModalOpen(false)
+        let res = await loginUser({ name: values.username, email: values.email })
+        setCookies({ key: "token", value: res.token })
+        localStorage.setItem('userData', JSON.stringify({ name: values.username, email: values.email }))
+        // setIsModalOpen(false)
+        if(dialogRef?.current) {
+            dialogRef.current.click()
+        }
         setLoggedIn(true)
         toast(`${values.username} Logged in Succesfully`)
     }
 
     return (<>
-        <div className="h-[100vh] w-[100vw] flex justify-center items-center bg-[#000007f2] absolute top-0 z-9">
+
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button ref={dialogRef} variant="outline">Login</Button>
+            </DialogTrigger>
             <Form {...form}>
-                <div>
-                    <Cross className="text-white cursor-pointer rotate-45 mb-4 ml-[95%]" onClick={() => setIsModalOpen(false)} />
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-[400px] border-1 p-[40px] rounded-sm">
-                        <h1 className="text-[1.5rem] mb-4">Create an account</h1>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>Create Account</DialogTitle>
+                    <DialogDescription>
+                        Creat a new account or login into existing.
+                    </DialogDescription>
+                </DialogHeader>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
                         <FormField
                             control={form.control}
                             name="username"
@@ -84,11 +103,13 @@ const LoginForm = ({ setIsModalOpen }: modalState) => {
                                 </FormItem>
                             )}
                         />
-                        <Button className="text-[#FE7743] cursor-pointer w-[100%];" type="submit">Submit</Button>
+                <DialogFooter>
+                    <Button className="text-[#FE7743] cursor-pointer w-[100px] mt-[1.5rem]" type="submit">Login</Button>
+                </DialogFooter>
                     </form>
-                </div>
+            </DialogContent>
             </Form>
-        </div>
+        </Dialog>
     </>)
 }
 
