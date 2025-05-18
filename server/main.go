@@ -17,8 +17,6 @@ type User struct {
 	Email string `json:"email"`
 }
 
-var authSecret = []byte("copowered by WisdomBits")
-
 func main() {
 	app := fiber.New()
 	// if you receive Bad request log out the user from FE...

@@ -2,16 +2,16 @@ package routes
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
 	"github.com/karan/practicelapbs/database"
 	"github.com/karan/practicelapbs/models"
 	"gorm.io/gorm"
 )
-
-var authSecret = []byte("copowered by WisdomBits")
 
 func AuthRoutes(app *fiber.App) {
 	app.Post("/login", LoginHandler)
@@ -19,6 +19,8 @@ func AuthRoutes(app *fiber.App) {
 
 func LoginHandler(c *fiber.Ctx) error {
 
+	godotenv.Load()
+	var authSecret = os.Getenv("AUTH_SECRET")
 	bodyBytes := c.Body()
 	fmt.Println("Raw request body:", string(bodyBytes))
 	var existingUser models.User
