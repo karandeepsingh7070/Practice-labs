@@ -12,4 +12,13 @@ const getCookies = ({key}:cookieModal) => {
     return val
 }
 
-export {setCookies,getCookies}
+const deleteCookies = ({key}:cookieModal) => {
+    let val = cookies.remove(`${key}`)
+    return val
+}
+
+const logoutUser = () => {
+    deleteCookies({key : 'token'})
+}
+
+export {setCookies,getCookies,logoutUser}

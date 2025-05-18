@@ -16,11 +16,14 @@ import {
 } from "@/components/ui/navigation-menu"
 import { loginModal } from "@/modals"
 import { navItems } from "./navItems"
+import { logoutUser } from "@/helper"
+import { useUserState } from "@/store/useUserStore"
 
 
 export function NavigationItems() {
 
     const [userData,setUserData] = React.useState<any>({name: ""})
+    const {setLoggedIn} = useUserState()
 
     React.useEffect(() => {
         let user :loginModal = JSON.parse(localStorage.getItem('userData') || '')
@@ -55,7 +58,12 @@ export function NavigationItems() {
                 </NavigationMenuLink>
               </li>
               {navItems.map((nav) => {
-                return <ListItem href="/account" title={`${nav.title}`}>
+                return <ListItem onClick={() => {
+                  if(nav.title == "Logout") {
+                    logoutUser()
+                    setLoggedIn(false)
+                  }
+                }} title={`${nav.title}`}>
                 {nav.description}
                 </ListItem>
               })}
