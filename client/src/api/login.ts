@@ -3,7 +3,6 @@ import { loginRes } from './../modals';
 
 import API from "@/lib/axios"
 import { loginModal } from "@/modals"
-import { useEffect, useState } from "react"
 
 export const loginUser = async (formData: loginModal) => {
     let { name, email } = formData

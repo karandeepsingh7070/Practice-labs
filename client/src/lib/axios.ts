@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: process.env.LABS_PUBLIC_API_BASE_URL || "http://localhost:8000",
+  baseURL: "http://localhost:8000" || "https://practice-labs-be.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
