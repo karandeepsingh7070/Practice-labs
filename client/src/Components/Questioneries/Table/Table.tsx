@@ -23,13 +23,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {QuestionData} from "../../../api/scrapeQuestions"
+// import {QuestionData} from "../../../api/scrapeQuestions"
 import {columns} from "./Column"
+import useFetchProblems from "@/hooks/useFetchProblems"
 
-const data = QuestionData['questions']
+// const data = QuestionData['questions']
 
 
 export function DataTable() {
+  const {problems} = useFetchProblems()
+  const data = problems
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -120,10 +123,6 @@ export function DataTable() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
         <div className="space-x-2">
           <Button
             variant="outline"
