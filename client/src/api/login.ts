@@ -8,7 +8,8 @@ import { useEffect, useState } from "react"
 export const loginUser = async (formData: loginModal) => {
     let { name, email } = formData
     let res: loginRes = await API.post("/login", {
-        data: { name, email }
+        name, 
+        email
     })
     return {token: res.data.token}
 }

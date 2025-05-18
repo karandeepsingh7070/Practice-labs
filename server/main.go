@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/karan/practicelapbs/database"
+	"github.com/karan/practicelapbs/models"
 	routes "github.com/karan/practicelapbs/routes"
 )
 
@@ -22,6 +24,8 @@ func main() {
 		AllowMethods:     "GET,POST,PUT,DELETE,OPTIONS",
 		AllowCredentials: true,
 	}))
+	database.ConnectDB()
+	database.DB.AutoMigrate(&models.User{})
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("You are connected to the Practice Labs Server")
 	})

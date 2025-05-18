@@ -1,11 +1,14 @@
 package routes
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/karan/practicelapbs/database"
 	"github.com/karan/practicelapbs/models"
+	"gorm.io/gorm"
 )
 
 var authSecret = []byte("copowered by WisdomBits")
@@ -15,11 +18,23 @@ func AuthRoutes(app *fiber.App) {
 }
 
 func LoginHandler(c *fiber.Ctx) error {
+
+	bodyBytes := c.Body()
+	fmt.Println("Raw request body:", string(bodyBytes))
+	var existingUser models.User
+
 	user := new(models.User)
 	if err := c.BodyParser(user); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Invalid request",
 		})
+	}
+
+	result := database.DB.Where("email = ?", user.Email).First(&existingUser)
+	if result.Error == gorm.ErrRecordNotFound {
+		database.DB.Create(&user)
+	} else {
+		user = &existingUser
 	}
 
 	claims := jwt.MapClaims{
@@ -35,6 +50,8 @@ func LoginHandler(c *fiber.Ctx) error {
 			"error": "Could not generate token",
 		})
 	}
+
+	fmt.Println("User:", user)
 
 	return c.JSON(fiber.Map{
 		"message": "Success",
